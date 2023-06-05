@@ -141,6 +141,7 @@
 
   <string name="pref_category_title_about">Know More</string>
   <string name="pref_about_key">sb_pref_key_about</string>
+  <string name="pref_about_privacy">sb_pref_key_privacy</string>
   <string name="pref_about_title">About Simple Bible</string>
   <string name="pref_about_summary"><![CDATA[and it\'s change history.]]></string>
 

@@ -55,17 +55,22 @@
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/pref_category_title_about">
-        <Preference
-            app:icon="@drawable/ic_info"
-            app:key="@string/pref_about_key"
-            app:summary="@string/pref_about_summary"
-            app:title="@string/pref_about_title" />
+<!--        <Preference-->
+<!--            app:icon="@drawable/ic_info"-->
+<!--            app:key="@string/pref_about_key"-->
+<!--            app:summary="@string/pref_about_summary"-->
+<!--            app:title="@string/pref_about_title" />-->
 
         <Preference
             app:icon="@drawable/ic_info"
-            app:key="@string/pref_license_key"
-            app:summary="@string/pref_license_summary"
-            app:title="@string/pref_license_title" />
+            app:key="@string/pref_about_privacy"
+            app:title="Privacy Policy" />
+
+<!--        <Preference-->
+<!--            app:icon="@drawable/ic_info"-->
+<!--            app:key="@string/pref_license_key"-->
+<!--            app:summary="@string/pref_license_summary"-->
+<!--            app:title="@string/pref_license_title" />-->
 
     </PreferenceCategory>
 

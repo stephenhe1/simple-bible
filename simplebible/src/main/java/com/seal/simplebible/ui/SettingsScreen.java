@@ -455,17 +455,29 @@ public class SettingsScreen
         handlePreferenceClickRate();
       } else if (key.equalsIgnoreCase(getString(R.string.pref_email_key))) {
         handlePreferenceClickEmail();
-      } else if (key.equalsIgnoreCase(getString(R.string.pref_about_key))) {
-        handlePreferenceClickAbout();
-      } else if (key.equalsIgnoreCase(getString(R.string.pref_license_key))) {
-        handlePreferenceClickLicense();
-      } else {
+      }
+      else if (key.equalsIgnoreCase(getString(R.string.pref_about_privacy))){
+        startActivityAlt(getContext(), new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("https://github.com/stephenhe1/Simple-Bible-Privacy-Policy#readme"))));
+      }
+//      } else if (key.equalsIgnoreCase(getString(R.string.pref_about_key))) {
+//        handlePreferenceClickAbout();
+//      } else if (key.equalsIgnoreCase(getString(R.string.pref_license_key))) {
+//        handlePreferenceClickLicense();
+//      } else {
+      else{
         Log.d(TAG, "onPreferenceTreeClick: ignoring preferenceKey = [" + key + "]");
       }
 
       return true;
     }
 
+  }
+
+  public void startActivityAlt(final Context context, final Intent intent) {
+    if (!(context instanceof Activity)) {
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+    context.startActivity(intent);
   }
 
 }
