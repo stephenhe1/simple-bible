@@ -1,0 +1,79 @@
+package com.seal.simplebible.model.view;
+
+import android.app.Application;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+
+import com.seal.simplebible.R;
+import com.seal.simplebible.db.DbSetupWorker;
+import com.seal.simplebible.db.SbDatabase;
+import com.seal.simplebible.db.dao.SbDao;
+import com.seal.simplebible.db.entities.EntityBook;
+import com.seal.simplebible.model.Book;
+
+import java.util.List;
+import java.util.UUID;
+
+public class SetupViewModel
+    extends AndroidViewModel {
+
+  private static final String TAG = "SetupViewModel";
+
+  private final SbDao dao;
+
+  private static UUID DB_SETUP_WORKER_UUID;
+
+  public SetupViewModel(@NonNull final Application application) {
+    super(application);
+    dao = SbDatabase.getDatabase(getApplication()).getDao();
+  }
+
+  @NonNull
+  public LiveData<Integer> validateTableData() {
+    final Application app = getApplication();
+    return dao.validateTableData(
+        app.getString(R.string.db_setup_validation_book_name_first).trim(),
+        app.getString(R.string.db_setup_validation_book_name_last).trim(),
+        app.getString(R.string.db_setup_validation_book_number_last).trim(),
+        app.getString(R.string.db_setup_validation_verse_number_last).trim());
+  }
+
+  @NonNull
+  public UUID setupDatabase(@NonNull final WorkManager workManager) {
+    if (DB_SETUP_WORKER_UUID != null) {
+      return DB_SETUP_WORKER_UUID;
+    }
+
+    final OneTimeWorkRequest workRequest =
+        new OneTimeWorkRequest.Builder(DbSetupWorker.class).build();
+    workManager.enqueue(workRequest);
+    return workRequest.getId();
+
+  }
+
+  public UUID getWorkerUuid() {
+    return DB_SETUP_WORKER_UUID;
+  }
+
+  public void setWorkerUuid(@NonNull final UUID uuid) {
+    DB_SETUP_WORKER_UUID = uuid;
+  }
+
+  @NonNull
+  public LiveData<List<EntityBook>> getAllBooks() {
+    return dao.getAllBookRecords();
+  }
+
+  public void updateCacheBooks(@NonNull final List<Book> bookList) {
+    Book.updateCacheBooks(bookList);
+  }
+
+  public boolean isCacheUpdated() {
+    return Book.isCacheUpdated();
+  }
+
+}

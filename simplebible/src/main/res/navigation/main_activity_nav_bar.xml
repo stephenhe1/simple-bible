@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/screen_setup"
-        android:name="com.andrewchelladurai.simplebible.ui.SetupScreen"
+        android:name="com.seal.simplebible.ui.SetupScreen"
         android:label="SetupScreen">
         <action
             android:id="@+id/nav_from_scr_setup_to_scr_home"
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
       android:id="@+id/screen_home"
-      android:name="com.andrewchelladurai.simplebible.ui.HomeScreen"
+      android:name="com.seal.simplebible.ui.HomeScreen"
       android:label="home_fragment"
       tools:layout="@layout/home_screen">
       <action
@@ -32,11 +32,11 @@
     </fragment>
     <fragment
         android:id="@+id/screen_settings"
-        android:name="com.andrewchelladurai.simplebible.ui.SettingsScreen"
+        android:name="com.seal.simplebible.ui.SettingsScreen"
         android:label="SettingsScreen" />
     <fragment
         android:id="@+id/screen_book_list"
-        android:name="com.andrewchelladurai.simplebible.ui.BooksScreen"
+        android:name="com.seal.simplebible.ui.BooksScreen"
         android:label="book_list_screen"
         tools:layout="@layout/books_screen">
         <action
@@ -45,7 +45,7 @@
     </fragment>
     <fragment
         android:id="@+id/screen_bookmark"
-        android:name="com.andrewchelladurai.simplebible.ui.BookmarkScreen"
+        android:name="com.seal.simplebible.ui.BookmarkScreen"
         android:label="bookmark_screen"
         tools:layout="@layout/bookmark_screen">
         <argument
@@ -54,7 +54,7 @@
     </fragment>
     <fragment
         android:id="@+id/screen_bookmark_list"
-        android:name="com.andrewchelladurai.simplebible.ui.BookmarksScreen"
+        android:name="com.seal.simplebible.ui.BookmarksScreen"
         android:label="bookmark_screen"
         tools:layout="@layout/bookmarks_screen">
         <action
@@ -63,7 +63,7 @@
     </fragment>
     <fragment
         android:id="@+id/screen_chapter"
-        android:name="com.andrewchelladurai.simplebible.ui.ChapterScreen"
+        android:name="com.seal.simplebible.ui.ChapterScreen"
         android:label="chapter_screen"
         tools:layout="@layout/chapter_screen">
         <action
@@ -80,7 +80,7 @@
     </fragment>
     <fragment
         android:id="@+id/screen_search"
-        android:name="com.andrewchelladurai.simplebible.ui.SearchScreen"
+        android:name="com.seal.simplebible.ui.SearchScreen"
         android:label="search_screen"
         tools:layout="@layout/search_screen">
         <action

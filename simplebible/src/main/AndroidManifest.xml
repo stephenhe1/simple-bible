@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.andrewchelladurai.simplebible">
+    package="com.seal.simplebible">
 
     <application
         android:allowBackup="true"
@@ -14,8 +14,10 @@
         tools:ignore="GoogleAppIndexingWarning"
         android:dataExtractionRules="@xml/data_extraction_rules"
         tools:targetApi="s">
+        <meta-data android:name="applovin.sdk.key"
+            android:value="5hxMSt34oB1RIRM_h0mcDQGEwckDZJGuXxT4AFg5fME7Bw6HuAD8pecNB75rxnyRLKTBBHwwautsRb1lIhwOpD"/>
         <activity
-            android:name=".ui.SimpleBible"
+            android:name="com.seal.simplebible.ui.SimpleBible"
             android:theme="@style/SbSplashTheme"
             android:windowSoftInputMode="stateHidden|adjustNothing"
             android:exported="true">

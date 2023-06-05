@@ -5,18 +5,36 @@ android {
     buildToolsVersion '33.0.1'
 
     defaultConfig {
-        applicationId "com.andrewchelladurai.simplebible"
+        applicationId "com.seal.simplebible"
         minSdkVersion 21
         targetSdk 33
-        versionName '2018.01.16'
-        versionCode 20180116
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary = true
+        versionName '2023.06.05'
+        versionCode 20230605
+        multiDexEnabled true
+        buildConfigField "boolean", "IS_TEST_BUILD", "false"
+        buildConfigField "boolean", "IS_GPLAY_BUILD", "false"
+        setProperty("archivesBaseName", applicationId + "-v" + versionCode + "-" + versionName)
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    flavorDimensions "default"
+    productFlavors {
+        flavorAtest {
+            applicationId "com.seal.simplebible"
+            versionCode = Integer.parseInt(new Date().format('yyMMdd'))
+            versionName = defaultConfig.versionName + "-" + new Date().format('HHmm')
+            buildConfigField "boolean", "IS_TEST_BUILD", "true"
+        }
+        flavorDefault {
+        }
+        flavorGplay {
+            buildConfigField "boolean", "IS_GPLAY_BUILD", "true"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
@@ -45,4 +63,7 @@ dependencies {
     annotationProcessor 'androidx.room:room-compiler:2.4.3'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'com.applovin:applovin-sdk:+'
+    implementation 'com.facebook.android:audience-network-sdk:6.+'
+    implementation 'androidx.annotation:annotation:1.0.0'
 }
