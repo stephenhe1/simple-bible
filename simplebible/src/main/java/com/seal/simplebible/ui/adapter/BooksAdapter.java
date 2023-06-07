@@ -104,12 +104,14 @@ public class BooksAdapter
 
       final Resources resources = nameView.getContext().getResources();
       nameView.setText(book.getName());
+      nameView.setContentDescription("Book Name: " + nameView.getText());
       detailsView.setText(HtmlCompat.fromHtml(resources.getQuantityString(
           R.plurals.scr_books_list_item_template_details,
           book.getChapters(),
           book.getVerses(),
           book.getChapters(),
           book.getDescription()), HtmlCompat.FROM_HTML_MODE_COMPACT));
+      detailsView.setContentDescription("Details: It " + detailsView.getText());
     }
 
   }

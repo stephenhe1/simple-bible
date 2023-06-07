@@ -22,8 +22,12 @@ import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
@@ -113,6 +117,10 @@ public class SettingsScreen
                            @Nullable final Bundle savedInstanceState) {
     ops.hideKeyboard();
     ops.hideNavigationView();
+//    ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+//    if (actionBar != null) {
+//      actionBar.setDisplayHomeAsUpEnabled(true);
+//    }
     return super.onCreateView(inflater, container, savedInstanceState);
   }
 
@@ -455,6 +463,12 @@ public class SettingsScreen
         handlePreferenceClickRate();
       } else if (key.equalsIgnoreCase(getString(R.string.pref_email_key))) {
         handlePreferenceClickEmail();
+      }
+      else if (key.equalsIgnoreCase(getString(R.string.pref_about_exit))){
+        NavHostFragment.findNavController(getParentFragment())
+                .navigate(R.id.screen_home);
+//        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//        fragmentManager.popBackStack();
       }
       else if (key.equalsIgnoreCase(getString(R.string.pref_about_privacy))){
         startActivityAlt(getContext(), new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("https://github.com/stephenhe1/Simple-Bible-Privacy-Policy#readme"))));

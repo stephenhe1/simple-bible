@@ -15,7 +15,6 @@
     android:animateLayoutChanges="true"
     app:elevation="@dimen/none"
     app:fabCradleMargin="@dimen/none"
-    app:hideOnScroll="true"
     app:menu="@menu/menu_chapter_screen" />
 
   <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -24,6 +23,7 @@
     android:layout_height="wrap_content"
     android:text="@string/chapters"
     app:icon="@drawable/ic_list"
+      android:accessibilityTraversalAfter="@id/scr_chapter_title"
     app:layout_anchor="@id/scr_chapter_bapp_bar" />
 
   <androidx.constraintlayout.widget.ConstraintLayout

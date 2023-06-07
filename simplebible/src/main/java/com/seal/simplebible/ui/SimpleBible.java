@@ -12,6 +12,7 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
@@ -27,12 +28,23 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
 
+import com.applovin.sdk.AppLovinSdk;
+import com.applovin.sdk.AppLovinSdkConfiguration;
+import com.facebook.ads.Ad;
+import com.facebook.ads.AdError;
+import com.facebook.ads.AdListener;
+import com.facebook.ads.AdSettings;
+import com.facebook.ads.AdSize;
+import com.facebook.ads.AdView;
+import com.facebook.ads.AudienceNetworkAds;
+import com.facebook.ads.BuildConfig;
 import com.seal.simplebible.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.seal.simplebible.ui.ops.SimpleBibleOps;
 import com.seal.simplebible.utils.ReminderWorker;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
@@ -41,6 +53,8 @@ public class SimpleBible
   implements SimpleBibleOps {
 
   private static final String TAG = "SimpleBibleScreen";
+  private AdView adView;
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +67,57 @@ public class SimpleBible
     if (savedInstanceState == null) {
       setupNotificationChannel();
     }
+
+    if (!AudienceNetworkAds.isInitialized(this)) {
+        AdSettings.setTestMode(true);
+      AudienceNetworkAds
+              .buildInitSettings(this)
+              .withInitListener(new AudienceNetworkAds.InitListener() {
+                @Override
+                public void onInitialized(AudienceNetworkAds.InitResult initResult) {
+                  adView = new AdView(SimpleBible.this, "IMG_16_9_APP_INSTALL#YOUR_PLACEMENT_ID", AdSize.BANNER_HEIGHT_50);
+
+                  LinearLayout adContainer = (LinearLayout) findViewById(R.id.banner_container);
+
+
+                  adContainer.addView(adView);
+
+                  adView.loadAd(adView.buildLoadAdConfig().withAdListener(new AdListener() {
+                    @Override
+                    public void onError(Ad ad, AdError adError) {
+
+                    }
+
+                    @Override
+                    public void onAdLoaded(Ad ad) {
+
+                    }
+
+                    @Override
+                    public void onAdClicked(Ad ad) {
+
+                    }
+
+                    @Override
+                    public void onLoggingImpression(Ad ad) {
+
+                    }
+                  }).build());
+                }
+              })
+              .initialize();
+    }
+
+    AppLovinSdk.getInstance(this).setMediationProvider( "max" );
+    AppLovinSdk.getInstance( this ).getSettings().setVerboseLogging( true );
+    AppLovinSdk.getInstance(this).getSettings().setTestDeviceAdvertisingIds(Arrays.asList("7960fdfb-9705-4e84-bffb-7d723df827a9"));
+    AppLovinSdk.initializeSdk( this, new AppLovinSdk.SdkInitializationListener() {
+      @Override
+      public void onSdkInitialized(final AppLovinSdkConfiguration configuration)
+      {
+        // AppLovin SDK is initialized, start loading ads
+      }
+    } );
 
     // create the UI
     super.onCreate(savedInstanceState);
@@ -232,6 +297,14 @@ public class SimpleBible
                                                     .putInt(ReminderWorker.ARG_MINUTE, minute)
                                                     .build())
                                     .build());
+  }
+
+  @Override
+  protected void onDestroy() {
+    if (adView != null) {
+      adView.destroy();
+    }
+    super.onDestroy();
   }
 
 }

@@ -151,8 +151,7 @@ public class SetupScreen
   }
 
   private void showHomeScreen() {
-    Log.d(TAG, "showHomeScreen:");
-    NavHostFragment.findNavController(SetupScreen.this)
+    NavHostFragment.findNavController(getParentFragment())
                    .navigate(R.id.nav_from_scr_setup_to_scr_home);
   }
 

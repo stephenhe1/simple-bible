@@ -3,6 +3,7 @@ package com.seal.simplebible.ui;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,12 +18,18 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.facebook.ads.Ad;
+import com.facebook.ads.AdError;
+import com.facebook.ads.InterstitialAd;
+import com.facebook.ads.InterstitialAdListener;
 import com.seal.simplebible.R;
 import com.seal.simplebible.model.Book;
 import com.seal.simplebible.model.Verse;
 import com.seal.simplebible.model.view.HomeViewModel;
 import com.seal.simplebible.ui.ops.HomeScreenOps;
 import com.seal.simplebible.ui.ops.SimpleBibleOps;
+
+import org.w3c.dom.Text;
 
 import java.util.Calendar;
 
@@ -39,6 +46,8 @@ public class HomeScreen
   private View rootView;
 
   private static String DEFAULT_REFERENCE = null;
+  private InterstitialAd  interstitialAd ;
+
 
   @Override
   public void onAttach(@NonNull final Context context) {
@@ -63,8 +72,47 @@ public class HomeScreen
     rootView = inflater.inflate(R.layout.home_screen, container, false);
     ops.showNavigationView();
 
+    interstitialAd = new InterstitialAd(rootView.getContext(), "YOUR_PLACEMENT_ID");
+    InterstitialAdListener interstitialAdListener = new InterstitialAdListener() {
+      @Override
+      public void onInterstitialDisplayed(Ad ad) {
+        handleActionSettings();
+      }
+
+      @Override
+      public void onInterstitialDismissed(Ad ad) {
+
+      }
+
+      @Override
+      public void onError(Ad ad, AdError adError) {
+
+      }
+
+      @Override
+      public void onAdLoaded(Ad ad) {
+
+      }
+
+      @Override
+      public void onAdClicked(Ad ad) {
+
+      }
+
+      @Override
+      public void onLoggingImpression(Ad ad) {
+
+      }
+    };
+    // load the ad
+    interstitialAd.loadAd(
+            interstitialAd.buildLoadAdConfig()
+                    .withAdListener(interstitialAdListener)
+                    .build());
+
     rootView.findViewById(R.id.scr_home_action_settings)
-            .setOnClickListener(v -> handleActionSettings());
+//            .setOnClickListener(v -> handleActionSettings());
+            .setOnClickListener(v -> showAdWithDelay());
     rootView.findViewById(R.id.scr_home_action_bookmark)
             .setOnClickListener(v -> handleActionBookmark());
     rootView.findViewById(R.id.scr_home_action_chapter)
@@ -152,20 +200,26 @@ public class HomeScreen
   private void displayVerse(@NonNull final Verse verse) {
     Book book = verse.getBook();
 
-    if (verse.getReference()
-             .equalsIgnoreCase(DEFAULT_REFERENCE)) {
-      Log.d(TAG, "displayVerse: displaying defaultReference[" + DEFAULT_REFERENCE + "]");
-      displayDefaultVerse();
-      return;
-    }
+//    if (verse.getReference()
+//             .equalsIgnoreCase(DEFAULT_REFERENCE)) {
+//      Log.d(TAG, "displayVerse: displaying defaultReference[" + DEFAULT_REFERENCE + "]");
+//      displayDefaultVerse();
+//      return;
+//    }
 
-    Log.d(TAG, "displayVerse: displaying reference[" + verse.getReference() + "]");
-    final String formattedText = String.format(getString(R.string.scr_home_verse_template),
-                                               book.getName(), verse.getChapterNumber(),
-                                               verse.getVerseNumber(), verse.getVerseText());
-    final Spanned htmlText = HtmlCompat.fromHtml(formattedText, HtmlCompat.FROM_HTML_MODE_COMPACT);
-    final TextView textView = rootView.findViewById(R.id.scr_home_verse);
-    textView.setText(htmlText);
+//    Log.d(TAG, "displayVerse: displaying reference[" + verse.getReference() + "]");
+    TextView textView1 = rootView.findViewById(R.id.scr_home_verse);
+    TextView textView2 = rootView.findViewById(R.id.scr_home_verse_chapter);
+    TextView textView3 = rootView.findViewById(R.id.scr_home_verse_book);
+    textView1.setText(verse.getVerseText());
+    textView2.setText("Chapter " + verse.getChapterNumber() + " Verse " +verse.getVerseNumber());
+    textView3.setText("Inside the book: " +book.getName());
+//    final String formattedText = String.format(getString(R.string.scr_home_verse_template),
+//                                               book.getName(), verse.getChapterNumber(),
+//                                               verse.getVerseNumber(), verse.getVerseText());
+//    final Spanned htmlText = HtmlCompat.fromHtml(formattedText, HtmlCompat.FROM_HTML_MODE_COMPACT);
+//    final TextView textView = rootView.findViewById(R.id.scr_home_verse);
+//    textView.setText(htmlText);
   }
 
   private void displayDefaultVerse() {
@@ -178,7 +232,7 @@ public class HomeScreen
 
   private void handleActionSettings() {
     Log.d(TAG, "handleActionSettings:");
-    NavHostFragment.findNavController(this)
+    NavHostFragment.findNavController(getParentFragment())
                    .navigate(R.id.nav_from_scr_home_to_scr_settings);
   }
 
@@ -222,6 +276,28 @@ public class HomeScreen
     Log.d(TAG, "handleActionShare:");
     final CharSequence text = ((TextView) rootView.findViewById(R.id.scr_home_verse)).getText();
     ops.shareText(text.toString());
+  }
+
+  private void showAdWithDelay() {
+    /**
+     * Here is an example for displaying the ad with delay;
+     * Please do not copy the Handler into your project
+     */
+     Handler handler = new Handler();
+    handler.postDelayed(new Runnable() {
+      public void run() {
+        // Check if interstitialAd has been loaded successfully
+        if(interstitialAd == null || !interstitialAd.isAdLoaded()) {
+          return;
+        }
+        // Check if ad is already expired or invalidated, and do not show ad if that is the case. You will not get paid to show an invalidated ad.
+        if(interstitialAd.isAdInvalidated()) {
+          return;
+        }
+        // Show the ad
+        interstitialAd.show();
+      }
+    }, 500); // Show the ad after 15 minutes
   }
 
 }

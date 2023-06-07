@@ -29,6 +29,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:src="@drawable/ic_bookmark"
+      android:contentDescription="Bookmark Today's Quote"
     app:layout_constraintBottom_toBottomOf="@+id/scr_home_action_chapter"
     app:layout_constraintEnd_toStartOf="@+id/scr_home_action_chapter"
     app:layout_constraintHorizontal_bias="0.84"
@@ -39,6 +40,7 @@
     android:id="@+id/scr_home_action_chapter"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+      android:contentDescription="Go to the chapter of today's quote"
     android:src="@drawable/ic_list"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
@@ -49,6 +51,7 @@
     android:id="@+id/scr_home_action_share"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+      android:contentDescription="Share the quote"
     android:src="@drawable/ic_share"
     app:layout_constraintBottom_toBottomOf="@+id/scr_home_action_chapter"
     app:layout_constraintEnd_toEndOf="parent"
@@ -65,16 +68,49 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/scr_home_action_settings">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:contentDescription="Today's Quote"
+        android:focusable="true"
+      android:id="@+id/TodayQuote">
+      <TextView
+          android:id="@+id/scr_home_verse"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:textSize="20sp"
+          android:layout_margin="@dimen/big"
+          android:padding="@dimen/big"
+          android:textAlignment="center"
+          android:focusable="true"
+          android:text="For God so loved the world, that he gave his one and only Son, that whoever believes in him, should not perish, but have eternal life." />
+      <TextView
+          android:id="@+id/scr_home_verse_book"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:textSize="15sp"
+          android:layout_margin="@dimen/big"
+          android:padding="@dimen/big"
+          android:focusable="true"
+          android:textAlignment="center"
+          android:text="Inside the book: The Gospel of John" />
+      <TextView
+          android:id="@+id/scr_home_verse_chapter"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:textSize="15sp"
+          android:layout_margin="@dimen/big"
+          android:focusable="true"
+          android:padding="@dimen/big"
+          android:textAlignment="center"
+          android:text="Chapter 03 Verse 16" />
+    </LinearLayout>
 
-    <TextView
-      android:id="@+id/scr_home_verse"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:layout_margin="@dimen/big"
-      android:padding="@dimen/big"
-      android:textAlignment="center"
-      tools:text="@string/application_name" />
+
   </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -73,5 +73,23 @@
 <!--            app:title="@string/pref_license_title" />-->
 
     </PreferenceCategory>
+    <PreferenceCategory app:title="Exit the Settings">
+        <!--        <Preference-->
+        <!--            app:icon="@drawable/ic_info"-->
+        <!--            app:key="@string/pref_about_key"-->
+        <!--            app:summary="@string/pref_about_summary"-->
+        <!--            app:title="@string/pref_about_title" />-->
+
+        <Preference
+            app:key="@string/pref_about_exit"
+            app:title="Return To Home Screen" />
+
+        <!--        <Preference-->
+        <!--            app:icon="@drawable/ic_info"-->
+        <!--            app:key="@string/pref_license_key"-->
+        <!--            app:summary="@string/pref_license_summary"-->
+        <!--            app:title="@string/pref_license_title" />-->
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -19,6 +20,12 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.applovin.mediation.MaxAd;
+import com.applovin.mediation.MaxError;
+import com.applovin.mediation.nativeAds.MaxNativeAdListener;
+import com.applovin.mediation.nativeAds.MaxNativeAdLoader;
+import com.applovin.mediation.nativeAds.MaxNativeAdView;
+import com.applovin.mediation.nativeAds.MaxNativeAdViewBinder;
 import com.seal.simplebible.R;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -44,6 +51,12 @@ public class SearchScreen
   private SearchResultAdapter adapter;
   private View rootView;
 
+  private MaxNativeAdLoader nativeAdLoader;
+  private FrameLayout nativeAdLayout;
+  private MaxNativeAdView   nativeAdView;
+
+  private MaxAd nativeAd;
+
   @Override
   public void onAttach(@NonNull final Context context) {
     super.onAttach(context);
@@ -64,6 +77,64 @@ public class SearchScreen
                            @Nullable Bundle savedState) {
     ops.showNavigationView();
     rootView = inflater.inflate(R.layout.search_screen, container, false);
+
+    nativeAdLayout = rootView.findViewById( R.id.native_ad_layout );
+
+
+    MaxNativeAdViewBinder binder = new MaxNativeAdViewBinder.Builder( R.layout.native_custom_ad_view )
+            .setTitleTextViewId( R.id.title_text_view )
+            .setBodyTextViewId( R.id.body_text_view )
+            .setAdvertiserTextViewId( R.id.advertiser_text_view )
+            .setIconImageViewId( R.id.icon_image_view )
+            .setMediaContentViewGroupId( R.id.media_view_container )
+            .setOptionsContentViewGroupId( R.id.options_view )
+            .setStarRatingContentViewGroupId( R.id.star_rating_view )
+            .setCallToActionButtonId( R.id.cta_button )
+            .build();
+    nativeAdView = new MaxNativeAdView( binder, rootView.getContext() );
+
+    nativeAdLoader = new MaxNativeAdLoader( "9b90805a7f5c5a59", rootView.getContext() );
+    nativeAdLoader.setNativeAdListener( new MaxNativeAdListener()
+    {
+      @Override
+      public void onNativeAdLoaded(@Nullable final MaxNativeAdView nativeAdView, final MaxAd ad)
+      {
+
+        // Cleanup any pre-existing native ad to prevent memory leaks.
+        if ( nativeAd != null )
+        {
+          nativeAdLoader.destroy( nativeAd );
+        }
+
+        // Save ad for cleanup.
+        nativeAd = ad;
+
+        // Add ad view to view.
+        nativeAdLayout.removeAllViews();
+        nativeAdLayout.addView( nativeAdView );
+        nativeAdLoader.loadAd( nativeAdView );
+      }
+
+      @Override
+      public void onNativeAdLoadFailed(final String adUnitId, final MaxError error)
+      {
+
+      }
+
+      @Override
+      public void onNativeAdClicked(final MaxAd ad)
+      {
+
+      }
+
+      @Override
+      public void onNativeAdExpired(final MaxAd ad)
+      {
+
+      }
+    } );
+
+
     ((TextView) rootView.findViewById(R.id.scr_search_help_text)).setText(
       HtmlCompat.fromHtml(getString(R.string.scr_search_help_text),
                           HtmlCompat.FROM_HTML_MODE_COMPACT));
@@ -333,6 +404,19 @@ public class SearchScreen
   @Override
   public Verse getVerseAtPosition(@IntRange(from = 0) final int position) {
     return model.getVerseAtPosition(position);
+  }
+
+  @Override
+  public void onDestroy() {
+    if ( nativeAd != null )
+    {
+      // Call destroy on the native ad from any native ad loader.
+      nativeAdLoader.destroy( nativeAd );
+    }
+
+    // Destroy the actual loader itself
+    nativeAdLoader.destroy();
+    super.onDestroy();
   }
 
   @Override

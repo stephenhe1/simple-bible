@@ -8,12 +8,12 @@
     <item
       android:id="@+id/scr_chapter_menu_bookmark"
       android:icon="@drawable/ic_bookmark"
-      android:title="@string/scr_chapter_menu_action_bookmark"
+      android:title="Bookmark Verses"
       app:showAsAction="always" />
     <item
       android:id="@+id/scr_chapter_menu_share"
       android:icon="@drawable/ic_share"
-      android:title="@string/scr_chapter_menu_action_share"
+      android:title="Share Verses"
       app:showAsAction="always" />
     <!--
         <item
